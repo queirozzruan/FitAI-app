@@ -1,3 +1,4 @@
+import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:fitai/features/splash/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -13,5 +14,6 @@ abstract final class AppRoutes {
 
   static final Map<String, WidgetBuilder> builders = {
     splash: (_) => const SplashScreen(),
+    onboarding: (_) => const OnboardingScreen(),
   };
 }
