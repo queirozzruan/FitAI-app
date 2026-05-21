@@ -1,4 +1,5 @@
 import 'package:fitai/app/routes.dart';
+import 'package:fitai/app/theme.dart';
 import 'package:flutter/material.dart';
 
 class FitAiApp extends StatelessWidget {
@@ -10,6 +11,7 @@ class FitAiApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.splash,
       routes: AppRoutes.builders,
+      theme: FitAiTheme.light,
       title: 'FitAI',
     );
   }

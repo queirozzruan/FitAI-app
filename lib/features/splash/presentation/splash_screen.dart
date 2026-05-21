@@ -5,10 +5,10 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text('FitAI'),
+          child: Text('FitAI', style: Theme.of(context).textTheme.displaySmall),
         ),
       ),
     );
