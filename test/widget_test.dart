@@ -1,4 +1,5 @@
 import 'package:fitai/app/app.dart';
+import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,5 +18,15 @@ void main() {
 
     expect(find.text('Treinos claros para cada dia'), findsOneWidget);
     expect(find.text('Continuar'), findsOneWidget);
+  });
+
+  testWidgets('shows the visual auth form', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: AuthScreen()),
+    );
+
+    expect(find.text('Acesse seus treinos'), findsOneWidget);
+    expect(find.text('E-mail'), findsOneWidget);
+    expect(find.text('Cadastro'), findsOneWidget);
   });
 }
