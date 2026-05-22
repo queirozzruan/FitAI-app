@@ -53,10 +53,10 @@ void main() {
       const MaterialApp(home: AnamnesisScreen()),
     );
 
-    expect(find.text('Anamnese inicial'), findsOneWidget);
-    expect(find.text('Nome'), findsOneWidget);
-    expect(find.text('Dias disponiveis'), findsOneWidget);
-    expect(find.text('Lesoes ou restricoes'), findsOneWidget);
+    expect(find.text('Seus aspectos fisicos'), findsOneWidget);
+    expect(find.text('Idade'), findsOneWidget);
+    expect(find.text('Limitacoes Fisicas'), findsOneWidget);
+    expect(find.text('Marque seu objetivo'), findsOneWidget);
   });
 
   testWidgets('finishes onboarding on the visual auth route', (
@@ -88,6 +88,6 @@ void main() {
     await tester.tap(find.text('Entrar').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('Anamnese inicial'), findsOneWidget);
+    expect(find.text('Seus aspectos fisicos'), findsOneWidget);
   });
 }
