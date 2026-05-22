@@ -12,6 +12,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1200));
     await tester.pumpAndSettle();
 
-    expect(find.text('Treinos claros para cada dia'), findsOneWidget);
+    expect(find.text('Seu treino, do seu jeito'), findsOneWidget);
   });
 }

@@ -18,8 +18,8 @@ void main() {
       const MaterialApp(home: OnboardingScreen()),
     );
 
-    expect(find.text('Treinos claros para cada dia'), findsOneWidget);
-    expect(find.text('Continuar'), findsOneWidget);
+    expect(find.text('Seu treino, do seu jeito'), findsOneWidget);
+    expect(find.text('Comece ja'), findsOneWidget);
   });
 
   testWidgets('shows the visual auth form', (WidgetTester tester) async {
@@ -53,11 +53,7 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Continuar'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Continuar'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Comecar'));
+    await tester.tap(find.text('Comece ja'));
     await tester.pumpAndSettle();
 
     expect(find.text('Acesse seus treinos'), findsOneWidget);
