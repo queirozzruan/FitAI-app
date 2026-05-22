@@ -32,6 +32,22 @@ void main() {
     expect(find.text('Cadastre-se'), findsOneWidget);
   });
 
+  testWidgets('switches from login to visual sign up', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: AuthScreen()),
+    );
+
+    await tester.tap(find.text('Cadastre-se'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Crie sua conta'), findsOneWidget);
+    expect(find.text('Nome'), findsOneWidget);
+    expect(find.text('Confirmar senha'), findsOneWidget);
+    expect(find.text('Criar conta'), findsOneWidget);
+  });
+
   testWidgets('shows the initial anamnesis fields', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(home: AnamnesisScreen()),

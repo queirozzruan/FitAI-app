@@ -12,7 +12,10 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  var _mode = AuthMode.signIn;
   var _rememberMe = false;
+
+  bool get _isSignIn => _mode == AuthMode.signIn;
 
   @override
   Widget build(BuildContext context) {
@@ -38,103 +41,155 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
               const SizedBox(height: 56),
-              Text(
-                'Bem vindo de volta!',
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w700,
-                  height: 1.2,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Entre com suas informacoes para ter acesso ao seu treino personalizado!',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: const Color(0xFF434655),
-                  height: 1.6,
-                ),
+              _AuthHeader(
+                description: _isSignIn
+                    ? 'Entre com suas informacoes para ter acesso ao seu treino personalizado!'
+                    : 'Preencha seus dados para comecar a montar seu treino personalizado!',
+                title: _isSignIn ? 'Bem vindo de volta!' : 'Crie sua conta',
               ),
               const SizedBox(height: AppSpacing.xxl),
-              const _AuthTextField(
-                hint: 'voce@exemplo.com',
-                keyboardType: TextInputType.emailAddress,
-                label: 'E-mail',
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: AppSpacing.lg),
-              const _AuthTextField(
-                hint: 'Digite sua senha',
-                label: 'Senha',
-                obscureText: true,
-                textInputAction: TextInputAction.done,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Checkbox(
-                      activeColor: FitAiColors.royalBlue,
-                      side: const BorderSide(color: Color(0xFFC3C6D7)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+              if (_isSignIn) ...[
+                const _AuthTextField(
+                  hint: 'voce@exemplo.com',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'E-mail',
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                const _AuthTextField(
+                  hint: 'Digite sua senha',
+                  label: 'Senha',
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Checkbox(
+                        activeColor: FitAiColors.royalBlue,
+                        side: const BorderSide(color: Color(0xFFC3C6D7)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        value: _rememberMe,
+                        onChanged: (value) {
+                          setState(() => _rememberMe = value ?? false);
+                        },
                       ),
-                      value: _rememberMe,
-                      onChanged: (value) {
-                        setState(() => _rememberMe = value ?? false);
-                      },
                     ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  Text(
-                    'Lembrar de mim',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: const Color(0xFF434655),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      'Lembrar de mim',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: const Color(0xFF434655),
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      foregroundColor: const Color(0xFF004AC6),
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    const Spacer(),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: const Color(0xFF004AC6),
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {},
+                      child: const Text('Esqueceu a senha?'),
                     ),
-                    onPressed: () {},
-                    child: const Text('Esqueceu a senha?'),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ] else ...[
+                const _AuthTextField(
+                  hint: 'Seu nome completo',
+                  label: 'Nome',
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                const _AuthTextField(
+                  hint: 'voce@exemplo.com',
+                  keyboardType: TextInputType.emailAddress,
+                  label: 'E-mail',
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                const _AuthTextField(
+                  hint: 'Digite sua senha',
+                  label: 'Senha',
+                  obscureText: true,
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                const _AuthTextField(
+                  hint: 'Digite novamente',
+                  label: 'Confirmar senha',
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                ),
+              ],
               const SizedBox(height: AppSpacing.lg),
-              _LoginButton(onPressed: widget.onContinue),
+              _AuthPrimaryButton(
+                label: _isSignIn ? 'Entrar' : 'Criar conta',
+                onPressed: widget.onContinue,
+              ),
               const SizedBox(height: AppSpacing.xxl),
               const _ContinueDivider(),
               const SizedBox(height: AppSpacing.xxl),
-              Row(
-                children: [
-                  Expanded(
-                    child: _ProviderButton(
-                      icon: Icons.g_mobiledata_rounded,
-                      label: 'Google',
-                      onPressed: widget.onContinue,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: _ProviderButton(
-                      icon: Icons.apple_rounded,
-                      label: 'Apple',
-                      onPressed: widget.onContinue,
-                    ),
-                  ),
-                ],
-              ),
+              _SocialProviders(onPressed: widget.onContinue),
               const SizedBox(height: AppSpacing.xxl),
-              const Center(child: _SignUpPrompt()),
+              Center(
+                child: _AuthSwitchPrompt(
+                  actionLabel: _isSignIn ? 'Cadastre-se' : 'Entrar',
+                  leadingText: _isSignIn
+                      ? 'Ainda nao tem conta?'
+                      : 'Ja tem uma conta?',
+                  onPressed: () {
+                    setState(() {
+                      _mode = _isSignIn
+                          ? AuthMode.signUp
+                          : AuthMode.signIn;
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+enum AuthMode { signIn, signUp }
+
+class _AuthHeader extends StatelessWidget {
+  const _AuthHeader({required this.description, required this.title});
+
+  final String description;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
+            height: 1.2,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          description,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: const Color(0xFF434655),
+            height: 1.6,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -227,9 +282,10 @@ class _ContinueDivider extends StatelessWidget {
   }
 }
 
-class _LoginButton extends StatelessWidget {
-  const _LoginButton({required this.onPressed});
+class _AuthPrimaryButton extends StatelessWidget {
+  const _AuthPrimaryButton({required this.label, required this.onPressed});
 
+  final String label;
   final VoidCallback? onPressed;
 
   @override
@@ -244,8 +300,37 @@ class _LoginButton extends StatelessWidget {
           textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         ),
         onPressed: onPressed,
-        child: const Text('Entrar'),
+        child: Text(label),
       ),
+    );
+  }
+}
+
+class _SocialProviders extends StatelessWidget {
+  const _SocialProviders({required this.onPressed});
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _ProviderButton(
+            icon: Icons.g_mobiledata_rounded,
+            label: 'Google',
+            onPressed: onPressed,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: _ProviderButton(
+            icon: Icons.apple_rounded,
+            label: 'Apple',
+            onPressed: onPressed,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -281,8 +366,16 @@ class _ProviderButton extends StatelessWidget {
   }
 }
 
-class _SignUpPrompt extends StatelessWidget {
-  const _SignUpPrompt();
+class _AuthSwitchPrompt extends StatelessWidget {
+  const _AuthSwitchPrompt({
+    required this.actionLabel,
+    required this.leadingText,
+    required this.onPressed,
+  });
+
+  final String actionLabel;
+  final String leadingText;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -290,7 +383,7 @@ class _SignUpPrompt extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(
-          'Ainda nao tem conta?',
+          leadingText,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: const Color(0xFF434655),
           ),
@@ -301,8 +394,8 @@ class _SignUpPrompt extends StatelessWidget {
             padding: const EdgeInsets.only(left: AppSpacing.xs),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          onPressed: () {},
-          child: const Text('Cadastre-se'),
+          onPressed: onPressed,
+          child: Text(actionLabel),
         ),
       ],
     );
