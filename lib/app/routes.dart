@@ -1,5 +1,6 @@
 import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
+import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:fitai/features/splash/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,11 @@ abstract final class AppRoutes {
         Navigator.of(context).pushReplacementNamed(anamnesis);
       },
     ),
-    anamnesis: (_) => const AnamnesisScreen(),
+    anamnesis: (context) => AnamnesisScreen(
+      onContinue: () {
+        Navigator.of(context).pushReplacementNamed(home);
+      },
+    ),
+    home: (_) => const HomeScreen(),
   };
 }

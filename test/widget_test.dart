@@ -2,6 +2,7 @@ import 'package:fitai/app/app.dart';
 import 'package:fitai/app/routes.dart';
 import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
+import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -57,6 +58,17 @@ void main() {
     expect(find.text('Idade'), findsOneWidget);
     expect(find.text('Limitacoes Fisicas'), findsOneWidget);
     expect(find.text('Marque seu objetivo'), findsOneWidget);
+  });
+
+  testWidgets('shows the workout agenda on home', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: HomeScreen()),
+    );
+
+    expect(find.text('Agenda de Treino'), findsOneWidget);
+    expect(find.text('Dia 1'), findsOneWidget);
+    expect(find.text('Treino A - Peito e triceps'), findsOneWidget);
+    expect(find.text('TREINOS'), findsOneWidget);
   });
 
   testWidgets('finishes onboarding on the visual auth route', (
