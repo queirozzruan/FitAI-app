@@ -1,4 +1,5 @@
 import 'package:fitai/app/app.dart';
+import 'package:fitai/app/routes.dart';
 import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
@@ -40,5 +41,41 @@ void main() {
     expect(find.text('Nome'), findsOneWidget);
     expect(find.text('Dias disponiveis'), findsOneWidget);
     expect(find.text('Lesoes ou restricoes'), findsOneWidget);
+  });
+
+  testWidgets('finishes onboarding on the visual auth route', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: AppRoutes.onboarding,
+        routes: AppRoutes.builders,
+      ),
+    );
+
+    await tester.tap(find.text('Continuar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Continuar'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Comecar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Acesse seus treinos'), findsOneWidget);
+  });
+
+  testWidgets('continues from visual auth to anamnesis', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        initialRoute: AppRoutes.login,
+        routes: AppRoutes.builders,
+      ),
+    );
+
+    await tester.tap(find.text('Entrar').last);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Anamnese inicial'), findsOneWidget);
   });
 }

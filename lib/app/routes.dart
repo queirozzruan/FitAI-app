@@ -16,8 +16,16 @@ abstract final class AppRoutes {
 
   static final Map<String, WidgetBuilder> builders = {
     splash: (_) => const SplashScreen(),
-    onboarding: (_) => const OnboardingScreen(),
-    login: (_) => const AuthScreen(),
+    onboarding: (context) => OnboardingScreen(
+      onFinished: () {
+        Navigator.of(context).pushReplacementNamed(login);
+      },
+    ),
+    login: (context) => AuthScreen(
+      onContinue: () {
+        Navigator.of(context).pushReplacementNamed(anamnesis);
+      },
+    ),
     anamnesis: (_) => const AnamnesisScreen(),
   };
 }
