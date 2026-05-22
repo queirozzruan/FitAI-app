@@ -1,0 +1,17 @@
+import 'package:fitai/app/app.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+void main() {
+  testWidgets('moves from splash to onboarding after the loading delay', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const FitAiApp());
+
+    expect(find.text('Seu treino, organizado.'), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 1200));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Treinos claros para cada dia'), findsOneWidget);
+  });
+}
