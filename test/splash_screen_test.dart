@@ -7,7 +7,7 @@ void main() {
   ) async {
     await tester.pumpWidget(const FitAiApp());
 
-    expect(find.text('Seu treino, organizado.'), findsOneWidget);
+    expect(find.text('SEU TREINO COM IA'), findsOneWidget);
 
     await tester.pump(const Duration(milliseconds: 1200));
     await tester.pumpAndSettle();
