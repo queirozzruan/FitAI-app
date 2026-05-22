@@ -1,3 +1,4 @@
+import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:fitai/features/splash/presentation/splash_screen.dart';
@@ -17,5 +18,6 @@ abstract final class AppRoutes {
     splash: (_) => const SplashScreen(),
     onboarding: (_) => const OnboardingScreen(),
     login: (_) => const AuthScreen(),
+    anamnesis: (_) => const AnamnesisScreen(),
   };
 }

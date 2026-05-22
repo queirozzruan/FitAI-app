@@ -1,4 +1,5 @@
 import 'package:fitai/app/app.dart';
+import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,5 +29,16 @@ void main() {
     expect(find.text('Acesse seus treinos'), findsOneWidget);
     expect(find.text('E-mail'), findsOneWidget);
     expect(find.text('Cadastro'), findsOneWidget);
+  });
+
+  testWidgets('shows the initial anamnesis fields', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: AnamnesisScreen()),
+    );
+
+    expect(find.text('Anamnese inicial'), findsOneWidget);
+    expect(find.text('Nome'), findsOneWidget);
+    expect(find.text('Dias disponiveis'), findsOneWidget);
+    expect(find.text('Lesoes ou restricoes'), findsOneWidget);
   });
 }
