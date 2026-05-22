@@ -27,9 +27,9 @@ void main() {
       const MaterialApp(home: AuthScreen()),
     );
 
-    expect(find.text('Acesse seus treinos'), findsOneWidget);
+    expect(find.text('Bem vindo de volta!'), findsOneWidget);
     expect(find.text('E-mail'), findsOneWidget);
-    expect(find.text('Cadastro'), findsOneWidget);
+    expect(find.text('Cadastre-se'), findsOneWidget);
   });
 
   testWidgets('shows the initial anamnesis fields', (WidgetTester tester) async {
@@ -56,7 +56,7 @@ void main() {
     await tester.tap(find.text('Comece ja'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Acesse seus treinos'), findsOneWidget);
+    expect(find.text('Bem vindo de volta!'), findsOneWidget);
   });
 
   testWidgets('continues from visual auth to anamnesis', (
