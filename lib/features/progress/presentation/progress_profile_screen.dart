@@ -273,39 +273,56 @@ class _ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final normalizedHeight = 48 + (value / 150 * 120).clamp(0, 120);
+    final heightFactor = (0.35 + (value / 150 * 0.65)).clamp(0.35, 1.0);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(
-          '${value.toStringAsFixed(0)}kg',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: FitAiColors.royalBlue,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Container(
-          height: normalizedHeight.toDouble(),
-          width: 42,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(999),
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [FitAiColors.royalBlue, Color(0x332563EB)],
+        SizedBox(
+          height: 20,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '${value.toStringAsFixed(0)}kg',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: FitAiColors.royalBlue,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
         const SizedBox(height: AppSpacing.sm),
-        Text(
-          _shortExerciseLabel(label),
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: const Color(0xFF505F76),
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: FractionallySizedBox(
+              heightFactor: heightFactor.toDouble(),
+              child: Container(
+                width: 42,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(999),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [FitAiColors.royalBlue, Color(0x332563EB)],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        SizedBox(
+          height: 18,
+          child: Text(
+            _shortExerciseLabel(label),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: const Color(0xFF505F76),
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],
