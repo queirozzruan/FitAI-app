@@ -1,0 +1,456 @@
+import 'package:fitai/app/theme.dart';
+import 'package:fitai/core/constants/app_spacing.dart';
+import 'package:fitai/data/mock/mock_progress.dart';
+import 'package:fitai/data/mock/mock_user.dart';
+import 'package:flutter/material.dart';
+
+class ProgressProfileScreen extends StatelessWidget {
+  const ProgressProfileScreen({super.key, this.onWorkoutsTap});
+
+  final VoidCallback? onWorkoutsTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: _progressBackground,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const _ProgressHeader(),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
+                child: Column(
+                  children: [
+                    const _ProfileHero(),
+                    const SizedBox(height: AppSpacing.xl),
+                    const _MetricGrid(),
+                    const SizedBox(height: AppSpacing.xl),
+                    const _ProgressChartCard(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: _ProgressBottomBar(onWorkoutsTap: onWorkoutsTap),
+    );
+  }
+}
+
+class _ProgressHeader extends StatelessWidget {
+  const _ProgressHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0x80E2E8F0))),
+        color: Color(0xCCF8FAFC),
+      ),
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      width: double.infinity,
+      child: Text(
+        'FitAI',
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          color: FitAiColors.royalBlue,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileHero extends StatelessWidget {
+  const _ProfileHero();
+
+  @override
+  Widget build(BuildContext context) {
+    return _ProgressCard(
+      child: Column(
+        children: [
+          Container(
+            alignment: Alignment.center,
+            height: 72,
+            width: 72,
+            decoration: const BoxDecoration(
+              color: Color(0x1A2563EB),
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              _initialFrom(mockUser.name),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                color: FitAiColors.royalBlue,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            mockUser.name,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontSize: 24,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            mockUser.goal,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: const Color(0xFF505F76),
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MetricGrid extends StatelessWidget {
+  const _MetricGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    final metrics = [
+      _ProgressMetric(
+        icon: Icons.local_fire_department_outlined,
+        label: 'Sequencia',
+        value: '$mockWeeklyFrequency/sem',
+      ),
+      _ProgressMetric(
+        icon: Icons.check_circle_outline_rounded,
+        label: 'Treinos',
+        value: '$mockCompletedWorkouts',
+      ),
+      _ProgressMetric(
+        icon: Icons.trending_up_rounded,
+        label: 'Carga',
+        value: '+${mockLoadProgressKg.toStringAsFixed(1)} kg',
+      ),
+      _ProgressMetric(
+        icon: Icons.event_available_outlined,
+        label: 'Dias',
+        value: '${mockUser.availableDays.length}',
+      ),
+    ];
+
+    return GridView.builder(
+      itemCount: metrics.length,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: 173 / 145,
+        crossAxisCount: 2,
+        crossAxisSpacing: AppSpacing.md,
+        mainAxisSpacing: AppSpacing.md,
+      ),
+      itemBuilder: (context, index) => metrics[index],
+    );
+  }
+}
+
+class _ProgressMetric extends StatelessWidget {
+  const _ProgressMetric({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ProgressCard(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(icon, color: FitAiColors.royalBlue, size: 24),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF505F76),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProgressChartCard extends StatelessWidget {
+  const _ProgressChartCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return _ProgressCard(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Evolucao de carga',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Historico recente dos principais treinos.',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: const Color(0xFF505F76),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xl),
+          SizedBox(
+            height: 192,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (final log in mockRecentWorkoutLogs)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xs,
+                      ),
+                      child: _ProgressBar(
+                        label: log.exerciseId,
+                        value: log.usedLoad,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: mockRecentWorkoutLogs
+                .map(
+                  (log) => Text(
+                    '${log.date.day}/${log.date.month}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: const Color(0xFF737686),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProgressBar extends StatelessWidget {
+  const _ProgressBar({required this.label, required this.value});
+
+  final String label;
+  final double value;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalizedHeight = 48 + (value / 150 * 120).clamp(0, 120);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(
+          '${value.toStringAsFixed(0)}kg',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: FitAiColors.royalBlue,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Container(
+          height: normalizedHeight.toDouble(),
+          width: 42,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [FitAiColors.royalBlue, Color(0x332563EB)],
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(
+          _shortExerciseLabel(label),
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: const Color(0xFF505F76),
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProgressBottomBar extends StatelessWidget {
+  const _ProgressBottomBar({required this.onWorkoutsTap});
+
+  final VoidCallback? onWorkoutsTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: Color(0xFFF1F5F9))),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 30,
+            color: Color(0x0D000000),
+            offset: Offset(0, -10),
+          ),
+        ],
+        color: Color(0xE6FFFFFF),
+      ),
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _BottomBarItem(
+                icon: Icons.fitness_center_rounded,
+                label: 'TREINOS',
+                onTap: onWorkoutsTap,
+              ),
+              const _BottomBarItem(
+                icon: Icons.trending_up_rounded,
+                isActive: true,
+                label: 'EVOLUCAO',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomBarItem extends StatelessWidget {
+  const _BottomBarItem({
+    required this.icon,
+    required this.label,
+    this.isActive = false,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final bool isActive;
+  final String label;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isActive ? FitAiColors.royalBlue : const Color(0xFF505F76);
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: SizedBox(
+        width: 88,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: isActive ? 25 : 21),
+            const SizedBox(height: 3),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProgressCard extends StatelessWidget {
+  const _ProgressCard({
+    required this.child,
+    this.padding = const EdgeInsets.all(AppSpacing.lg),
+  });
+
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: FitAiColors.white,
+        border: Border.all(color: const Color(0xFFEDEDF9)),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 40,
+            color: Color(0x08000000),
+            offset: Offset(0, 10),
+            spreadRadius: -10,
+          ),
+        ],
+      ),
+      child: Padding(padding: padding, child: child),
+    );
+  }
+}
+
+String _shortExerciseLabel(String exerciseId) {
+  if (exerciseId == 'bench-press') {
+    return 'Supino';
+  }
+
+  if (exerciseId == 'lat-pulldown') {
+    return 'Puxada';
+  }
+
+  if (exerciseId == 'leg-press') {
+    return 'Leg';
+  }
+
+  return 'Carga';
+}
+
+String _initialFrom(String name) {
+  if (name.isEmpty) {
+    return '?';
+  }
+
+  return name.substring(0, 1).toUpperCase();
+}
+
+const _progressBackground = Color(0xFFFAF8FF);

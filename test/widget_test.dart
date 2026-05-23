@@ -4,6 +4,7 @@ import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:fitai/features/progress/presentation/progress_profile_screen.dart';
 import 'package:fitai/features/workout/presentation/workout_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -81,6 +82,17 @@ void main() {
     expect(find.text('Supino reto'), findsOneWidget);
     expect(find.text('Series'), findsWidgets);
     expect(find.text('Iniciar treino'), findsOneWidget);
+  });
+
+  testWidgets('shows progress and profile screen', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: ProgressProfileScreen()),
+    );
+
+    expect(find.text('Ruan'), findsOneWidget);
+    expect(find.text('Evolucao de carga'), findsOneWidget);
+    expect(find.text('EVOLUCAO'), findsOneWidget);
+    expect(find.text('TREINOS'), findsOneWidget);
   });
 
   testWidgets('finishes onboarding on the visual auth route', (

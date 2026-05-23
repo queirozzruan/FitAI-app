@@ -2,6 +2,7 @@ import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:fitai/features/progress/presentation/progress_profile_screen.dart';
 import 'package:fitai/features/splash/presentation/splash_screen.dart';
 import 'package:fitai/features/workout/presentation/workout_screen.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +35,16 @@ abstract final class AppRoutes {
       },
     ),
     home: (context) => HomeScreen(
+      onProgressTap: () {
+        Navigator.of(context).pushReplacementNamed(progress);
+      },
       onWorkoutSelected: (_) {
         Navigator.of(context).pushNamed(workout);
+      },
+    ),
+    progress: (context) => ProgressProfileScreen(
+      onWorkoutsTap: () {
+        Navigator.of(context).pushReplacementNamed(home);
       },
     ),
     workout: (context) => WorkoutScreen(

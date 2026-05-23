@@ -5,8 +5,9 @@ import 'package:fitai/models/workout.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key, this.onWorkoutSelected});
+  const HomeScreen({super.key, this.onProgressTap, this.onWorkoutSelected});
 
+  final VoidCallback? onProgressTap;
   final ValueChanged<Workout>? onWorkoutSelected;
 
   @override
@@ -64,7 +65,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const _HomeBottomBar(),
+      bottomNavigationBar: _HomeBottomBar(onProgressTap: onProgressTap),
     );
   }
 }
@@ -268,7 +269,9 @@ class _TodayBadge extends StatelessWidget {
 }
 
 class _HomeBottomBar extends StatelessWidget {
-  const _HomeBottomBar();
+  const _HomeBottomBar({required this.onProgressTap});
+
+  final VoidCallback? onProgressTap;
 
   @override
   Widget build(BuildContext context) {
@@ -290,8 +293,8 @@ class _HomeBottomBar extends StatelessWidget {
           height: 80,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              _BottomBarItem(
+            children: [
+              const _BottomBarItem(
                 icon: Icons.fitness_center_rounded,
                 isActive: true,
                 label: 'TREINOS',
@@ -299,6 +302,7 @@ class _HomeBottomBar extends StatelessWidget {
               _BottomBarItem(
                 icon: Icons.trending_up_rounded,
                 label: 'EVOLUCAO',
+                onTap: onProgressTap,
               ),
             ],
           ),
@@ -313,32 +317,38 @@ class _BottomBarItem extends StatelessWidget {
     required this.icon,
     required this.label,
     this.isActive = false,
+    this.onTap,
   });
 
   final IconData icon;
   final bool isActive;
   final String label;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final color = isActive ? FitAiColors.royalBlue : const Color(0xFF505F76);
 
-    return SizedBox(
-      width: 88,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: isActive ? 21 : 25),
-          const SizedBox(height: 3),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: color,
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: SizedBox(
+        width: 88,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: isActive ? 21 : 25),
+            const SizedBox(height: 3),
+            Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: color,
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
