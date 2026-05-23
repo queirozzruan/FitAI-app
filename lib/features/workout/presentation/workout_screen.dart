@@ -2,59 +2,12 @@ import 'package:fitai/app/theme.dart';
 import 'package:fitai/core/constants/app_spacing.dart';
 import 'package:fitai/data/mock/mock_workouts.dart';
 import 'package:fitai/models/exercise.dart';
-import 'package:fitai/models/workout_log.dart';
 import 'package:flutter/material.dart';
 
-class WorkoutScreen extends StatefulWidget {
+class WorkoutScreen extends StatelessWidget {
   const WorkoutScreen({super.key, this.onBack});
 
   final VoidCallback? onBack;
-
-  @override
-  State<WorkoutScreen> createState() => _WorkoutScreenState();
-}
-
-class _WorkoutScreenState extends State<WorkoutScreen> {
-  final _completedSets = <String, int>{};
-  final _lastLoads = <String, double>{};
-  final _lastReps = <String, int>{};
-  final _logs = <WorkoutLog>[];
-
-  void _openExerciseLog(Exercise exercise) {
-    showModalBottomSheet<void>(
-      backgroundColor: Colors.transparent,
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return _ExerciseLogSheet(
-          completedSets: _completedSets[exercise.id] ?? 0,
-          exercise: exercise,
-          onSave: ({required load, required notes, required reps}) {
-            setState(() {
-              final completedSets = _completedSets[exercise.id] ?? 0;
-              final nextCompletedSets = completedSets >= exercise.sets
-                  ? exercise.sets
-                  : completedSets + 1;
-
-              _completedSets[exercise.id] = nextCompletedSets;
-              _lastLoads[exercise.id] = load;
-              _lastReps[exercise.id] = reps;
-              _logs.add(
-                WorkoutLog(
-                  completedSets: nextCompletedSets,
-                  date: DateTime.now(),
-                  exerciseId: exercise.id,
-                  notes: notes,
-                  performedReps: reps,
-                  usedLoad: load,
-                ),
-              );
-            });
-          },
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +18,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _WorkoutHeader(onBack: widget.onBack),
+            _WorkoutHeader(onBack: onBack),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(20, 38, 20, 120),
@@ -104,16 +57,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                               : AppSpacing.md,
                         ),
                         child: _ExerciseItemCard(
-                          completedSets:
-                              _completedSets[workout.exercises[index].id] ?? 0,
                           exercise: workout.exercises[index],
                           index: index,
-                          lastLoad:
-                              _lastLoads[workout.exercises[index].id],
-                          lastReps: _lastReps[workout.exercises[index].id],
-                          onRegister: () {
-                            _openExerciseLog(workout.exercises[index]);
-                          },
                         ),
                       ),
                   ],
@@ -123,7 +68,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _WorkoutFooter(registeredSets: _logs.length),
+      bottomNavigationBar: const _WorkoutFooter(),
     );
   }
 }
@@ -172,33 +117,10 @@ class _WorkoutHeader extends StatelessWidget {
 }
 
 class _ExerciseItemCard extends StatelessWidget {
-  const _ExerciseItemCard({
-    required this.completedSets,
-    required this.exercise,
-    required this.index,
-    required this.onRegister,
-    this.lastLoad,
-    this.lastReps,
-  });
+  const _ExerciseItemCard({required this.exercise, required this.index});
 
-  final int completedSets;
   final Exercise exercise;
   final int index;
-  final double? lastLoad;
-  final int? lastReps;
-  final VoidCallback onRegister;
-
-  String get _loadLabel {
-    if (lastLoad != null) {
-      return '${lastLoad!.toStringAsFixed(0)} kg';
-    }
-
-    if (exercise.suggestedLoad == 0) {
-      return 'Livre';
-    }
-
-    return '${exercise.suggestedLoad.toStringAsFixed(0)} kg';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -255,17 +177,13 @@ class _ExerciseItemCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  _ExerciseStat(
-                    label: 'Series',
-                    value: '$completedSets/${exercise.sets}',
-                  ),
-                  _ExerciseStat(
-                    label: 'Reps',
-                    value: lastReps?.toString() ?? exercise.reps,
-                  ),
+                  _ExerciseStat(label: 'Series', value: '${exercise.sets}'),
+                  _ExerciseStat(label: 'Reps', value: exercise.reps),
                   _ExerciseStat(
                     label: 'Carga',
-                    value: _loadLabel,
+                    value: exercise.suggestedLoad == 0
+                        ? 'Livre'
+                        : '${exercise.suggestedLoad.toStringAsFixed(0)} kg',
                   ),
                 ],
               ),
@@ -282,24 +200,6 @@ class _ExerciseItemCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: const Color(0xFF434655),
                       fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    height: 32,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: FitAiColors.royalBlue,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        side: const BorderSide(color: Color(0x332563EB)),
-                        shape: const StadiumBorder(),
-                        textStyle: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      onPressed: onRegister,
-                      child: const Text('Registrar serie'),
                     ),
                   ),
                 ],
@@ -375,9 +275,7 @@ class _ExerciseStat extends StatelessWidget {
 }
 
 class _WorkoutFooter extends StatelessWidget {
-  const _WorkoutFooter({required this.registeredSets});
-
-  final int registeredSets;
+  const _WorkoutFooter();
 
   @override
   Widget build(BuildContext context) {
@@ -412,173 +310,13 @@ class _WorkoutFooter extends StatelessWidget {
                 ),
               ),
               onPressed: () {},
-              child: Text(
-                registeredSets == 0 ? 'Iniciar treino' : 'Finalizar treino',
-              ),
+              child: const Text('Iniciar treino'),
             ),
           ),
         ),
       ),
     );
   }
-}
-
-class _ExerciseLogSheet extends StatefulWidget {
-  const _ExerciseLogSheet({
-    required this.completedSets,
-    required this.exercise,
-    required this.onSave,
-  });
-
-  final int completedSets;
-  final Exercise exercise;
-  final void Function({
-    required double load,
-    required String notes,
-    required int reps,
-  }) onSave;
-
-  @override
-  State<_ExerciseLogSheet> createState() => _ExerciseLogSheetState();
-}
-
-class _ExerciseLogSheetState extends State<_ExerciseLogSheet> {
-  late final TextEditingController _loadController;
-  late final TextEditingController _notesController;
-  late final TextEditingController _repsController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _loadController = TextEditingController(
-      text: widget.exercise.suggestedLoad == 0
-          ? ''
-          : widget.exercise.suggestedLoad.toStringAsFixed(0),
-    );
-    _notesController = TextEditingController();
-    _repsController = TextEditingController(
-      text: _firstNumberFrom(widget.exercise.reps),
-    );
-  }
-
-  @override
-  void dispose() {
-    _loadController.dispose();
-    _notesController.dispose();
-    _repsController.dispose();
-    super.dispose();
-  }
-
-  void _save() {
-    final load = double.tryParse(_loadController.text.replaceAll(',', '.')) ?? 0;
-    final reps = int.tryParse(_repsController.text) ?? 0;
-
-    widget.onSave(
-      load: load,
-      notes: _notesController.text.trim(),
-      reps: reps,
-    );
-    Navigator.of(context).pop();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: DecoratedBox(
-        decoration: const BoxDecoration(
-          color: FitAiColors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Registrar serie',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  widget.exercise.name,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: const Color(0xFF505F76),
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _loadController,
-                        decoration: const InputDecoration(
-                          labelText: 'Carga utilizada',
-                          suffixText: 'kg',
-                        ),
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    Expanded(
-                      child: TextField(
-                        controller: _repsController,
-                        decoration: const InputDecoration(
-                          labelText: 'Repeticoes',
-                        ),
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.md),
-                TextField(
-                  controller: _notesController,
-                  decoration: const InputDecoration(
-                    hintText: 'Observacoes simples',
-                    labelText: 'Observacoes',
-                  ),
-                  maxLines: 2,
-                  textInputAction: TextInputAction.done,
-                ),
-                const SizedBox(height: AppSpacing.lg),
-                SizedBox(
-                  height: 52,
-                  width: double.infinity,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF004AC6),
-                      shape: const StadiumBorder(),
-                    ),
-                    onPressed: _save,
-                    child: Text(
-                      widget.completedSets + 1 >= widget.exercise.sets
-                          ? 'Salvar ultima serie'
-                          : 'Salvar serie',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-String _firstNumberFrom(String value) {
-  return RegExp(r'\d+').firstMatch(value)?.group(0) ?? '';
 }
 
 const _workoutBackground = Color(0xFFFAF8FF);

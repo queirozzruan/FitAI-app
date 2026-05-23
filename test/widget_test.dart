@@ -83,28 +83,6 @@ void main() {
     expect(find.text('Iniciar treino'), findsOneWidget);
   });
 
-  testWidgets('registers a set on the workout screen', (
-    WidgetTester tester,
-  ) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: WorkoutScreen()),
-    );
-
-    expect(find.text('0/4'), findsOneWidget);
-
-    await tester.tap(find.text('Registrar serie').first);
-    await tester.pumpAndSettle();
-
-    expect(find.text('Carga utilizada'), findsOneWidget);
-    expect(find.text('Repeticoes'), findsOneWidget);
-
-    await tester.tap(find.text('Salvar serie'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('1/4'), findsOneWidget);
-    expect(find.text('Finalizar treino'), findsOneWidget);
-  });
-
   testWidgets('finishes onboarding on the visual auth route', (
     WidgetTester tester,
   ) async {
