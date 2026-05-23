@@ -3,6 +3,7 @@ import 'package:fitai/features/auth/presentation/auth_screen.dart';
 import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:fitai/features/splash/presentation/splash_screen.dart';
+import 'package:fitai/features/workout/presentation/workout_screen.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppRoutes {
@@ -32,6 +33,15 @@ abstract final class AppRoutes {
         Navigator.of(context).pushReplacementNamed(home);
       },
     ),
-    home: (_) => const HomeScreen(),
+    home: (context) => HomeScreen(
+      onWorkoutSelected: (_) {
+        Navigator.of(context).pushNamed(workout);
+      },
+    ),
+    workout: (context) => WorkoutScreen(
+      onBack: () {
+        Navigator.of(context).pop();
+      },
+    ),
   };
 }
