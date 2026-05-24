@@ -1,5 +1,6 @@
 import 'package:fitai/features/anamnesis/presentation/anamnesis_screen.dart';
 import 'package:fitai/features/auth/presentation/auth_screen.dart';
+import 'package:fitai/features/auth/presentation/password_recovery_screen.dart';
 import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:fitai/features/progress/presentation/progress_profile_screen.dart';
@@ -11,6 +12,7 @@ abstract final class AppRoutes {
   static const splash = '/';
   static const onboarding = '/onboarding';
   static const login = '/login';
+  static const passwordRecovery = '/password-recovery';
   static const anamnesis = '/anamnesis';
   static const home = '/home';
   static const workout = '/workout';
@@ -27,6 +29,14 @@ abstract final class AppRoutes {
     login: (context) => AuthScreen(
       onContinue: () {
         Navigator.of(context).pushReplacementNamed(anamnesis);
+      },
+      onForgotPassword: () {
+        Navigator.of(context).pushNamed(passwordRecovery);
+      },
+    ),
+    passwordRecovery: (context) => PasswordRecoveryScreen(
+      onBack: () {
+        Navigator.of(context).pop();
       },
     ),
     anamnesis: (context) => AnamnesisScreen(

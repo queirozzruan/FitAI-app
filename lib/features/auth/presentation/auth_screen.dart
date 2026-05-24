@@ -3,9 +3,10 @@ import 'package:fitai/core/constants/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key, this.onContinue});
+  const AuthScreen({super.key, this.onContinue, this.onForgotPassword});
 
   final VoidCallback? onContinue;
+  final VoidCallback? onForgotPassword;
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -94,7 +95,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         padding: EdgeInsets.zero,
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
-                      onPressed: () {},
+                      onPressed: widget.onForgotPassword,
                       child: const Text('Esqueceu a senha?'),
                     ),
                   ],
