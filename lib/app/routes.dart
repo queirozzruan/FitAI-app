@@ -5,6 +5,7 @@ import 'package:fitai/features/home/presentation/home_screen.dart';
 import 'package:fitai/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:fitai/features/progress/presentation/progress_profile_screen.dart';
 import 'package:fitai/features/splash/presentation/splash_screen.dart';
+import 'package:fitai/features/workout_generation/presentation/workout_generation_loading_screen.dart';
 import 'package:fitai/features/workout/presentation/workout_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +15,7 @@ abstract final class AppRoutes {
   static const login = '/login';
   static const passwordRecovery = '/password-recovery';
   static const anamnesis = '/anamnesis';
+  static const workoutGeneration = '/workout-generation';
   static const home = '/home';
   static const workout = '/workout';
   static const progress = '/progress';
@@ -41,6 +43,11 @@ abstract final class AppRoutes {
     ),
     anamnesis: (context) => AnamnesisScreen(
       onContinue: () {
+        Navigator.of(context).pushReplacementNamed(workoutGeneration);
+      },
+    ),
+    workoutGeneration: (context) => WorkoutGenerationLoadingScreen(
+      onCompleted: () {
         Navigator.of(context).pushReplacementNamed(home);
       },
     ),
