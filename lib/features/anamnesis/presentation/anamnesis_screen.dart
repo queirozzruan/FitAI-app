@@ -25,7 +25,7 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
 
   String? _requiredText(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Campo obrigatorio';
+      return 'Campo obrigatório';
     }
 
     return null;
@@ -48,7 +48,7 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Seus aspectos fisicos',
+                        'Seus aspectos físicos',
                         style: Theme.of(context).textTheme.displaySmall
                             ?.copyWith(fontSize: 32, height: 1.2),
                       ),
@@ -291,9 +291,7 @@ class _GenderSegment extends StatelessWidget {
           child: Text(
             gender,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: isSelected
-                  ? FitAiColors.textPrimary
-                  : _anamnesisTextMuted,
+              color: isSelected ? FitAiColors.textPrimary : _anamnesisTextMuted,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -347,9 +345,7 @@ class _GoalPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: isSelected
-          ? const Color(0x1A2563EB)
-          : FitAiColors.white,
+      color: isSelected ? const Color(0x1A2563EB) : FitAiColors.white,
       borderRadius: BorderRadius.circular(999),
       child: InkWell(
         borderRadius: BorderRadius.circular(999),
@@ -413,11 +409,7 @@ class _AnamnesisFooter extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0x00FAF8FF),
-            Color(0xF2FAF8FF),
-            _anamnesisBackground,
-          ],
+          colors: [Color(0x00FAF8FF), Color(0xF2FAF8FF), _anamnesisBackground],
         ),
       ),
       child: SafeArea(
