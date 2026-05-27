@@ -90,7 +90,7 @@ void main() {
     );
 
     expect(find.text('Ruan'), findsOneWidget);
-    expect(find.text('Evolução de carga'), findsOneWidget);
+    expect(find.text('Volume por treino'), findsOneWidget);
     expect(find.text('EVOLUÇÃO'), findsOneWidget);
     expect(find.text('TREINOS'), findsOneWidget);
   });

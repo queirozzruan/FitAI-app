@@ -4,6 +4,7 @@ import 'package:fitai/core/services/anamnesis_store.dart';
 import 'package:fitai/data/mock/mock_progress.dart';
 import 'package:fitai/data/mock/mock_user.dart';
 import 'package:fitai/models/anamnesis_data.dart';
+import 'package:fitai/models/workout_log.dart';
 import 'package:flutter/material.dart';
 
 class ProgressProfileScreen extends StatelessWidget {
@@ -250,26 +251,35 @@ class _MetricGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final recentSets = mockRecentWorkoutLogs.fold<int>(
+      0,
+      (total, log) => total + log.completedSets,
+    );
+    final recentVolume = mockRecentWorkoutLogs.fold<double>(
+      0,
+      (total, log) => total + _volumeFor(log),
+    );
+
     final metrics = [
       _ProgressMetric(
-        icon: Icons.local_fire_department_outlined,
-        label: 'Sequência',
-        value: '$mockWeeklyFrequency/sem',
+        icon: Icons.event_repeat_rounded,
+        label: 'Frequência semanal',
+        value: '${mockWeeklyFrequency}x',
       ),
       _ProgressMetric(
         icon: Icons.check_circle_outline_rounded,
-        label: 'Treinos',
+        label: 'Treinos concluídos',
         value: '$mockCompletedWorkouts',
       ),
       _ProgressMetric(
-        icon: Icons.trending_up_rounded,
-        label: 'Carga',
-        value: '+${mockLoadProgressKg.toStringAsFixed(1)} kg',
+        icon: Icons.format_list_numbered_rounded,
+        label: 'Séries recentes',
+        value: '$recentSets',
       ),
       _ProgressMetric(
-        icon: Icons.event_available_outlined,
-        label: 'Dias',
-        value: '${mockUser.availableDays.length}',
+        icon: Icons.scale_outlined,
+        label: 'Volume recente',
+        value: _formatVolume(recentVolume),
       ),
     ];
 
@@ -302,28 +312,40 @@ class _ProgressMetric extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ProgressCard(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(icon, color: FitAiColors.royalBlue, size: 24),
+          Icon(icon, color: FitAiColors.royalBlue, size: 22),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                value,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
+              SizedBox(
+                height: 30,
+                child: FittedBox(
+                  alignment: Alignment.centerLeft,
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    value,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                      height: 1.1,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: AppSpacing.xs),
               Text(
                 label,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: const Color(0xFF505F76),
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
+                  height: 1.2,
                 ),
               ),
             ],
@@ -339,20 +361,28 @@ class _ProgressChartCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final volumes = [
+      for (final log in mockRecentWorkoutLogs) _volumeFor(log),
+    ];
+    final maxVolume = volumes.fold<double>(
+      0,
+      (currentMax, volume) => volume > currentMax ? volume : currentMax,
+    );
+
     return _ProgressCard(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Evolução de carga',
+            'Volume por treino',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Histórico recente dos principais treinos.',
+            'Séries x repetições x carga dos últimos registros.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: const Color(0xFF505F76),
             ),
@@ -363,15 +393,26 @@ class _ProgressChartCard extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                for (final log in mockRecentWorkoutLogs)
+                for (
+                  var index = 0;
+                  index < mockRecentWorkoutLogs.length;
+                  index++
+                )
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.xs,
                       ),
                       child: _ProgressBar(
-                        label: log.exerciseId,
-                        value: log.usedLoad,
+                        heightFactor: maxVolume == 0
+                            ? 0.2
+                            : (volumes[index] / maxVolume)
+                                  .clamp(0.2, 1.0)
+                                  .toDouble(),
+                        label: _shortExerciseLabel(
+                          mockRecentWorkoutLogs[index].exerciseId,
+                        ),
+                        valueLabel: _formatCompactVolume(volumes[index]),
                       ),
                     ),
                   ),
@@ -399,15 +440,18 @@ class _ProgressChartCard extends StatelessWidget {
 }
 
 class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({required this.label, required this.value});
+  const _ProgressBar({
+    required this.heightFactor,
+    required this.label,
+    required this.valueLabel,
+  });
 
+  final double heightFactor;
   final String label;
-  final double value;
+  final String valueLabel;
 
   @override
   Widget build(BuildContext context) {
-    final heightFactor = (0.35 + (value / 150 * 0.65)).clamp(0.35, 1.0);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -416,7 +460,7 @@ class _ProgressBar extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              '${value.toStringAsFixed(0)}kg',
+              valueLabel,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: FitAiColors.royalBlue,
                 fontWeight: FontWeight.w700,
@@ -429,7 +473,7 @@ class _ProgressBar extends StatelessWidget {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: FractionallySizedBox(
-              heightFactor: heightFactor.toDouble(),
+              heightFactor: heightFactor,
               child: Container(
                 width: 42,
                 decoration: BoxDecoration(
@@ -593,6 +637,26 @@ String _shortExerciseLabel(String exerciseId) {
   }
 
   return 'Carga';
+}
+
+double _volumeFor(WorkoutLog log) {
+  return log.usedLoad * log.completedSets * log.performedReps;
+}
+
+String _formatCompactVolume(double kg) {
+  if (kg >= 1000) {
+    return '${(kg / 1000).toStringAsFixed(1).replaceAll('.', ',')}t';
+  }
+
+  return '${kg.toStringAsFixed(0)}kg';
+}
+
+String _formatVolume(double kg) {
+  if (kg >= 1000) {
+    return '${(kg / 1000).toStringAsFixed(1).replaceAll('.', ',')} t';
+  }
+
+  return '${kg.toStringAsFixed(0)} kg';
 }
 
 String _initialFrom(String name) {
