@@ -1,5 +1,7 @@
 import 'package:fitai/app/theme.dart';
 import 'package:fitai/core/constants/app_spacing.dart';
+import 'package:fitai/core/services/anamnesis_store.dart';
+import 'package:fitai/models/anamnesis_data.dart';
 import 'package:flutter/material.dart';
 
 class AnamnesisScreen extends StatefulWidget {
@@ -12,23 +14,91 @@ class AnamnesisScreen extends StatefulWidget {
 }
 
 class _AnamnesisScreenState extends State<AnamnesisScreen> {
+  final _ageController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _heightController = TextEditingController();
+  final _limitationsController = TextEditingController();
+  final _weightController = TextEditingController();
 
   var _gender = _genders.first;
   var _goal = _goals.first;
+  var _isSaving = false;
 
-  void _continue() {
-    if (_formKey.currentState?.validate() ?? false) {
+  @override
+  void dispose() {
+    _ageController.dispose();
+    _heightController.dispose();
+    _limitationsController.dispose();
+    _weightController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _continue() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      return;
+    }
+
+    setState(() => _isSaving = true);
+
+    try {
+      await AnamnesisStore.save(
+        AnamnesisData(
+          age: _parseInt(_ageController.text),
+          createdAt: DateTime.now(),
+          gender: _gender,
+          goal: _goal,
+          height: _parseDouble(_heightController.text),
+          limitations: _limitationsController.text.trim(),
+          weight: _parseDouble(_weightController.text),
+        ),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
       widget.onContinue?.call();
+    } on Object {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Nao foi possivel salvar seus dados. Tente novamente.'),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
     }
   }
 
-  String? _requiredText(String? value) {
+  String? _requiredPositiveNumber(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Campo obrigatorio';
     }
 
+    final number = _tryParseDouble(value);
+
+    if (number == null || number <= 0) {
+      return 'Informe um numero valido';
+    }
+
     return null;
+  }
+
+  double _parseDouble(String value) {
+    return _tryParseDouble(value) ?? 0;
+  }
+
+  int _parseInt(String value) {
+    return _parseDouble(value).round();
+  }
+
+  double? _tryParseDouble(String value) {
+    return double.tryParse(value.trim().replaceAll(',', '.'));
   }
 
   @override
@@ -63,12 +133,13 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
                       ),
                       const SizedBox(height: 64),
                       _MetricCard(
+                        controller: _ageController,
                         icon: Icons.calendar_month_outlined,
                         keyboardType: TextInputType.number,
                         label: 'Idade',
                         textInputAction: TextInputAction.next,
                         unit: 'Anos',
-                        validator: _requiredText,
+                        validator: _requiredPositiveNumber,
                       ),
                       const SizedBox(height: 20),
                       _GenderCard(
@@ -82,29 +153,31 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
                         children: [
                           Expanded(
                             child: _MetricCard(
+                              controller: _weightController,
                               icon: Icons.monitor_weight_outlined,
                               keyboardType: TextInputType.number,
                               label: 'Peso',
                               textInputAction: TextInputAction.next,
                               unit: 'Kg',
-                              validator: _requiredText,
+                              validator: _requiredPositiveNumber,
                             ),
                           ),
                           const SizedBox(width: AppSpacing.md),
                           Expanded(
                             child: _MetricCard(
+                              controller: _heightController,
                               icon: Icons.straighten_rounded,
                               keyboardType: TextInputType.number,
                               label: 'Altura',
                               textInputAction: TextInputAction.next,
                               unit: 'cm',
-                              validator: _requiredText,
+                              validator: _requiredPositiveNumber,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 64),
-                      const _LimitationsCard(),
+                      _LimitationsCard(controller: _limitationsController),
                       const SizedBox(height: 64),
                       Text(
                         'Marque seu objetivo',
@@ -142,7 +215,10 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _AnamnesisFooter(onPressed: _continue),
+      bottomNavigationBar: _AnamnesisFooter(
+        isSaving: _isSaving,
+        onPressed: _isSaving ? null : _continue,
+      ),
     );
   }
 }
@@ -175,6 +251,7 @@ class _AnamnesisHeader extends StatelessWidget {
 
 class _MetricCard extends StatelessWidget {
   const _MetricCard({
+    required this.controller,
     required this.icon,
     required this.keyboardType,
     required this.label,
@@ -183,6 +260,7 @@ class _MetricCard extends StatelessWidget {
     required this.validator,
   });
 
+  final TextEditingController controller;
   final IconData icon;
   final TextInputType keyboardType;
   final String label;
@@ -199,6 +277,7 @@ class _MetricCard extends StatelessWidget {
           _CardLabel(icon: icon, label: label),
           const SizedBox(height: AppSpacing.sm),
           TextFormField(
+            controller: controller,
             decoration: _metricDecoration(unit),
             keyboardType: keyboardType,
             textInputAction: textInputAction,
@@ -302,7 +381,9 @@ class _GenderSegment extends StatelessWidget {
 }
 
 class _LimitationsCard extends StatelessWidget {
-  const _LimitationsCard();
+  const _LimitationsCard({required this.controller});
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -316,6 +397,7 @@ class _LimitationsCard extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           TextFormField(
+            controller: controller,
             decoration: _fieldDecoration.copyWith(
               hintText:
                   'Descreva aqui suas limitacoes, problemas de saude e etc.\n(ex. Dor no joelho, hernia de disco...)',
@@ -398,9 +480,10 @@ class _GoalPill extends StatelessWidget {
 }
 
 class _AnamnesisFooter extends StatelessWidget {
-  const _AnamnesisFooter({required this.onPressed});
+  const _AnamnesisFooter({required this.isSaving, required this.onPressed});
 
-  final VoidCallback onPressed;
+  final bool isSaving;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -432,13 +515,18 @@ class _AnamnesisFooter extends StatelessWidget {
                 ),
               ),
               onPressed: onPressed,
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Continuar'),
-                  SizedBox(width: AppSpacing.xs),
-                  Icon(Icons.arrow_forward_rounded, size: 18),
+                  Text(isSaving ? 'Salvando...' : 'Continuar'),
+                  const SizedBox(width: AppSpacing.xs),
+                  Icon(
+                    isSaving
+                        ? Icons.hourglass_top_rounded
+                        : Icons.arrow_forward_rounded,
+                    size: 18,
+                  ),
                 ],
               ),
             ),

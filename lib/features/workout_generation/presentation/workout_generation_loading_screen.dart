@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:fitai/app/theme.dart';
 import 'package:fitai/core/constants/app_spacing.dart';
+import 'package:fitai/core/services/anamnesis_store.dart';
+import 'package:fitai/models/anamnesis_data.dart';
 import 'package:flutter/material.dart';
 
 class WorkoutGenerationLoadingScreen extends StatefulWidget {
@@ -18,11 +20,13 @@ class _WorkoutGenerationLoadingScreenState
     extends State<WorkoutGenerationLoadingScreen> {
   static const _loadingDuration = Duration(seconds: 7);
 
+  late final Future<AnamnesisData?> _anamnesisFuture;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    _anamnesisFuture = AnamnesisStore.load();
     _timer = Timer(_loadingDuration, () {
       if (!mounted) {
         return;
@@ -85,7 +89,12 @@ class _WorkoutGenerationLoadingScreenState
                         const SizedBox(height: AppSpacing.xxl),
                         const _GenerationProgress(),
                         const SizedBox(height: AppSpacing.xl),
-                        const _GenerationChecklist(),
+                        FutureBuilder<AnamnesisData?>(
+                          future: _anamnesisFuture,
+                          builder: (context, snapshot) {
+                            return _GenerationChecklist(data: snapshot.data);
+                          },
+                        ),
                         const Spacer(),
                         Text(
                           'Isso leva apenas alguns segundos.',
@@ -321,18 +330,26 @@ class _GenerationProgress extends StatelessWidget {
 }
 
 class _GenerationChecklist extends StatelessWidget {
-  const _GenerationChecklist();
+  const _GenerationChecklist({required this.data});
+
+  final AnamnesisData? data;
 
   @override
   Widget build(BuildContext context) {
+    final limitations = data?.limitations.trim();
+
     return Wrap(
       alignment: WrapAlignment.center,
       runSpacing: AppSpacing.sm,
       spacing: AppSpacing.sm,
-      children: const [
-        _GenerationChip(label: 'Dados fisicos'),
-        _GenerationChip(label: 'Objetivo'),
-        _GenerationChip(label: 'Limitacoes'),
+      children: [
+        const _GenerationChip(label: 'Dados fisicos'),
+        _GenerationChip(label: data == null ? 'Objetivo' : data!.goal),
+        _GenerationChip(
+          label: limitations == null || limitations.isEmpty
+              ? 'Sem limitacoes'
+              : 'Limitacoes salvas',
+        ),
       ],
     );
   }
