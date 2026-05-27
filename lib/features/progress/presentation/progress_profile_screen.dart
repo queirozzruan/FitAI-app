@@ -178,13 +178,13 @@ class _PersistedAnamnesisCard extends StatelessWidget {
                     label: 'Altura',
                     value: '${data.height.toStringAsFixed(0)} cm',
                   ),
-                  _AnamnesisChip(label: 'Genero', value: data.gender),
+                  _AnamnesisChip(label: 'Gênero', value: data.gender),
                   _AnamnesisChip(label: 'Objetivo', value: data.goal),
                 ],
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Limitacoes',
+                'Limitações',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: const Color(0xFF505F76),
                   fontWeight: FontWeight.w700,
@@ -193,7 +193,7 @@ class _PersistedAnamnesisCard extends StatelessWidget {
               const SizedBox(height: AppSpacing.xs),
               Text(
                 data.limitations.trim().isEmpty
-                    ? 'Nenhuma limitacao informada.'
+                    ? 'Nenhuma limitação informada.'
                     : data.limitations,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: FitAiColors.textPrimary,
@@ -253,7 +253,7 @@ class _MetricGrid extends StatelessWidget {
     final metrics = [
       _ProgressMetric(
         icon: Icons.local_fire_department_outlined,
-        label: 'Sequencia',
+        label: 'Sequência',
         value: '$mockWeeklyFrequency/sem',
       ),
       _ProgressMetric(
@@ -345,14 +345,14 @@ class _ProgressChartCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Evolucao de carga',
+            'Evolução de carga',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Historico recente dos principais treinos.',
+            'Histórico recente dos principais treinos.',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: const Color(0xFF505F76),
             ),
@@ -497,7 +497,7 @@ class _ProgressBottomBar extends StatelessWidget {
               const _BottomBarItem(
                 icon: Icons.trending_up_rounded,
                 isActive: true,
-                label: 'EVOLUCAO',
+                label: 'EVOLUÇÃO',
               ),
             ],
           ),

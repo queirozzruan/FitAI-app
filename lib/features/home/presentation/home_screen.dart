@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'Selecione seu treino de hoje.\nLembre-se, consistencia e a chave para um bom resultado.',
+                      'Selecione seu treino de hoje.\nLembre-se, consistência é a chave para um bom resultado.',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: const Color(0xFF434655),
@@ -195,7 +195,7 @@ class _WorkoutDayCard extends StatelessWidget {
                             ),
                             const SizedBox(width: AppSpacing.xs),
                             Text(
-                              '${workout.exercises.length} exercicios',
+                              '${workout.exercises.length} exercícios',
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     color: const Color(0xFF434655),
@@ -301,7 +301,7 @@ class _HomeBottomBar extends StatelessWidget {
               ),
               _BottomBarItem(
                 icon: Icons.trending_up_rounded,
-                label: 'EVOLUCAO',
+                label: 'EVOLUÇÃO',
                 onTap: onProgressTap,
               ),
             ],

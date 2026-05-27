@@ -177,7 +177,7 @@ class _ExerciseItemCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  _ExerciseStat(label: 'Series', value: '${exercise.sets}'),
+                  _ExerciseStat(label: 'Séries', value: '${exercise.sets}'),
                   _ExerciseStat(label: 'Reps', value: exercise.reps),
                   _ExerciseStat(
                     label: 'Carga',

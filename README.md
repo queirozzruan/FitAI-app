@@ -1,53 +1,53 @@
 # FitAI
 
-FitAI e um MVP mobile em Flutter para organizar treinos de musculacao com base em dados fisicos, objetivo e limitacoes do usuario.
+FitAI é um MVP mobile em Flutter para organizar treinos de musculação com base em dados físicos, objetivo e limitações do usuário.
 
-Nesta versao, a criacao do treino por IA e simulada com dados locais/mockados. O foco da entrega e demonstrar o fluxo principal do produto, interface navegavel, regras basicas de negocio e persistencia local.
+Nesta versão, a criação do treino por IA é simulada com dados locais/mockados. O foco da entrega é demonstrar o fluxo principal do produto, interface navegável, regras básicas de negócio e persistência local.
 
 ## Fluxo principal
 
 1. Splash screen.
 2. Onboarding.
 3. Login/cadastro visual.
-4. Anamnese com validacao de idade, peso, altura, genero, objetivo e limitacoes.
-5. Persistencia local dos dados da anamnese em JSON.
-6. Loading simulado de geracao de treino por IA.
+4. Anamnese com validação de idade, peso, altura, gênero, objetivo e limitações.
+5. Persistência local dos dados da anamnese em JSON.
+6. Loading simulado de geração de treino por IA.
 7. Home com cronograma de treinos mockados.
 8. Tela de treino do dia.
-9. Tela de evolucao e perfil.
-10. Recuperacao de senha visual.
+9. Tela de evolução e perfil.
+10. Recuperação de senha visual.
 
-## Criterios do trabalho final
+## Critérios do trabalho final
 
-### 1. Interface Grafica, Widgets e Usabilidade
+### 1. Interface Gráfica, Widgets e Usabilidade
 
-- Telas construidas com widgets nativos do Flutter.
-- Navegacao funcional entre splash, onboarding, auth, anamnese, loading, home, treino, progresso/perfil e recuperacao de senha.
+- Telas construídas com widgets nativos do Flutter.
+- Navegação funcional entre splash, onboarding, auth, anamnese, loading, home, treino, progresso/perfil e recuperação de senha.
 - Uso de `SafeArea`, `SingleChildScrollView`, `LayoutBuilder`, `Expanded` e componentes responsivos para reduzir risco de overflow.
-- Validacoes visuais na anamnese e feedback de erro via `SnackBar`.
+- Validações visuais na anamnese e feedback de erro via `SnackBar`.
 
-### 2. Regras de Negocio, Integracoes e Funcionalidade
+### 2. Regras de Negócio, Integrações e Funcionalidade
 
-- A anamnese valida dados obrigatorios e numeros positivos antes de avancar.
-- Os dados da anamnese sao persistidos localmente em arquivo JSON usando `dart:io`, sem backend.
-- O loading de geracao le os dados salvos e exibe informacoes baseadas no perfil persistido.
-- Em caso de falha ao salvar os dados, o app informa o erro e impede o avanco.
+- A anamnese valida dados obrigatórios e números positivos antes de avançar.
+- Os dados da anamnese são persistidos localmente em arquivo JSON usando `dart:io`, sem backend.
+- O loading de geração lê os dados salvos e exibe informações baseadas no perfil persistido.
+- Em caso de falha ao salvar os dados, o app informa o erro e impede o avanço.
 
 ### 3. Desenvolvimento, Versionamento e Pitch
 
-- O projeto usa Git com commits pequenos e mensagens no padrao Conventional Commits.
-- O codigo esta organizado por features, modelos, dados mockados e componentes reutilizaveis.
-- Impacto social para o pitch: o FitAI ajuda pessoas que nao tem acesso frequente a acompanhamento profissional a organizar treinos de forma mais simples, registrar sua evolucao e considerar limitacoes fisicas antes de iniciar uma rotina.
+- O projeto usa Git com commits pequenos e mensagens no padrão Conventional Commits.
+- O código está organizado por features, modelos, dados mockados e componentes reutilizáveis.
+- Impacto social para o pitch: o FitAI ajuda pessoas que não têm acesso frequente a acompanhamento profissional a organizar treinos de forma mais simples, registrar sua evolução e considerar limitações físicas antes de iniciar uma rotina.
 
 ## Roteiro rapido de demonstracao
 
 1. Abrir o app e passar pelo onboarding.
 2. Entrar pelo login visual.
-3. Preencher a anamnese com idade, peso e altura validos.
-4. Informar uma limitacao fisica, como dor no joelho.
-5. Avancar e mostrar o loading de IA lendo os dados salvos.
+3. Preencher a anamnese com idade, peso e altura válidos.
+4. Informar uma limitação física, como dor no joelho.
+5. Avançar e mostrar o loading de IA lendo os dados salvos.
 6. Exibir a home com o treino mockado.
-7. Abrir um treino e depois navegar para evolucao/perfil.
+7. Abrir um treino e depois navegar para evolução/perfil.
 
 ## Como rodar
 

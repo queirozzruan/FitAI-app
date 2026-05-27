@@ -89,7 +89,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
                             : Icons.mail_outline_rounded,
                         label: _submitted
                             ? 'Voltar para login'
-                            : 'Enviar link de recuperacao',
+                            : 'Enviar link de recuperação',
                         onPressed: _submitted ? _handleBack : _handleSubmit,
                       ),
                     ],
@@ -111,7 +111,7 @@ class _PasswordRecoveryScreenState extends State<PasswordRecoveryScreen> {
     }
 
     if (!email.contains('@') || !email.contains('.')) {
-      return 'Informe um e-mail valido.';
+      return 'Informe um e-mail válido.';
     }
 
     return null;
@@ -179,8 +179,8 @@ class _RecoveryHeader extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         Text(
           submitted
-              ? 'Enviamos as instrucoes para voce redefinir sua senha e voltar ao treino.'
-              : 'Informe o e-mail cadastrado para receber as instrucoes de redefinicao de senha.',
+              ? 'Enviamos as instruções para você redefinir sua senha e voltar ao treino.'
+              : 'Informe o e-mail cadastrado para receber as instruções de redefinição de senha.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: const Color(0xFF434655),
             height: 1.6,

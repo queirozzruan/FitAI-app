@@ -41,7 +41,7 @@ class OnboardingScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         Text(
-                          'Planos simples para treinar com foco, registrar sua evolucao e manter consistencia.',
+                          'Planos simples para treinar com foco, registrar sua evolução e manter consistência.',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
@@ -92,7 +92,7 @@ class _OnboardingButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Comece ja'),
+            Text('Comece já'),
             SizedBox(width: AppSpacing.sm),
             Icon(Icons.arrow_forward_rounded),
           ],

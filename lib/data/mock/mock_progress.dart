@@ -10,7 +10,7 @@ final mockRecentWorkoutLogs = [
     completedSets: 4,
     usedLoad: 62.5,
     performedReps: 9,
-    notes: 'Boa estabilidade nas ultimas series.',
+    notes: 'Boa estabilidade nas últimas séries.',
     date: DateTime(2026, 5, 19),
   ),
   WorkoutLog(
@@ -18,7 +18,7 @@ final mockRecentWorkoutLogs = [
     completedSets: 4,
     usedLoad: 57.5,
     performedReps: 10,
-    notes: 'Aumentar carga se a tecnica seguir consistente.',
+    notes: 'Aumentar carga se a técnica seguir consistente.',
     date: DateTime(2026, 5, 17),
   ),
   WorkoutLog(
@@ -26,7 +26,7 @@ final mockRecentWorkoutLogs = [
     completedSets: 4,
     usedLoad: 150,
     performedReps: 10,
-    notes: 'Execucao controlada.',
+    notes: 'Execução controlada.',
     date: DateTime(2026, 5, 15),
   ),
 ];

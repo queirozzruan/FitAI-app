@@ -65,7 +65,7 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Nao foi possivel salvar seus dados. Tente novamente.'),
+          content: Text('Não foi possível salvar seus dados. Tente novamente.'),
         ),
       );
     } finally {
@@ -77,13 +77,13 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
 
   String? _requiredPositiveNumber(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Campo obrigatorio';
+      return 'Campo obrigatório';
     }
 
     final number = _tryParseDouble(value);
 
     if (number == null || number <= 0) {
-      return 'Informe um numero valido';
+      return 'Informe um número válido';
     }
 
     return null;
@@ -118,13 +118,13 @@ class _AnamnesisScreenState extends State<AnamnesisScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Seus aspectos fisicos',
+                        'Seus aspectos físicos',
                         style: Theme.of(context).textTheme.displaySmall
                             ?.copyWith(fontSize: 32, height: 1.2),
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Precisão exige dados exatos. Conte-nos de onde voce esta partindo hoje.',
+                        'Precisão exige dados exatos. Conte-nos de onde você está partindo hoje.',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: _anamnesisTextMuted,
                           fontSize: 18,
@@ -303,7 +303,7 @@ class _GenderCard extends StatelessWidget {
         children: [
           const _CardLabel(
             icon: Icons.accessibility_new_rounded,
-            label: 'Genero',
+            label: 'Gênero',
           ),
           const SizedBox(height: AppSpacing.sm),
           Container(
@@ -393,14 +393,14 @@ class _LimitationsCard extends StatelessWidget {
         children: [
           const _CardLabel(
             icon: Icons.health_and_safety_outlined,
-            label: 'Limitacoes Fisicas',
+            label: 'Limitações Físicas',
           ),
           const SizedBox(height: AppSpacing.sm),
           TextFormField(
             controller: controller,
             decoration: _fieldDecoration.copyWith(
               hintText:
-                  'Descreva aqui suas limitacoes, problemas de saude e etc.\n(ex. Dor no joelho, hernia de disco...)',
+                  'Descreva aqui suas limitações, problemas de saúde e etc.\n(ex. Dor no joelho, hérnia de disco...)',
             ),
             keyboardType: TextInputType.multiline,
             maxLines: 3,
@@ -636,6 +636,6 @@ const _genders = ['Homem', 'Mulher'];
 const _goals = [
   'Ganhar massa magra',
   'Perder Gordura',
-  'Resistencia',
+  'Resistência',
   'Mobilidade',
 ];

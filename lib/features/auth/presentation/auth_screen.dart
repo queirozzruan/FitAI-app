@@ -44,9 +44,9 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 56),
               _AuthHeader(
                 description: _isSignIn
-                    ? 'Entre com suas informacoes para ter acesso ao seu treino personalizado!'
-                    : 'Preencha seus dados para comecar a montar seu treino personalizado!',
-                title: _isSignIn ? 'Bem vindo de volta!' : 'Crie sua conta',
+                    ? 'Entre com suas informações para ter acesso ao seu treino personalizado!'
+                    : 'Preencha seus dados para começar a montar seu treino personalizado!',
+                title: _isSignIn ? 'Bem-vindo de volta!' : 'Crie sua conta',
               ),
               const SizedBox(height: AppSpacing.xxl),
               if (_isSignIn) ...[
@@ -142,8 +142,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 child: _AuthSwitchPrompt(
                   actionLabel: _isSignIn ? 'Cadastre-se' : 'Entrar',
                   leadingText: _isSignIn
-                      ? 'Ainda nao tem conta?'
-                      : 'Ja tem uma conta?',
+                      ? 'Ainda não tem conta?'
+                      : 'Já tem uma conta?',
                   onPressed: () {
                     setState(() {
                       _mode = _isSignIn

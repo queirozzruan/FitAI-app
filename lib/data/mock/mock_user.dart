@@ -8,6 +8,6 @@ const mockUser = UserProfile(
   height: 1.76,
   gender: 'Masculino',
   goal: 'Hipertrofia com melhora de condicionamento',
-  availableDays: ['Segunda', 'Terca', 'Quinta', 'Sabado'],
+  availableDays: ['Segunda', 'Terça', 'Quinta', 'Sábado'],
   injuries: ['Desconforto no ombro direito'],
 );

@@ -78,7 +78,7 @@ class _WorkoutGenerationLoadingScreenState
                         ),
                         const SizedBox(height: AppSpacing.md),
                         Text(
-                          'A IA do FitAI esta analisando seus dados, objetivos e limitacoes para montar uma ficha segura para voce.',
+                          'A IA do FitAI está analisando seus dados, objetivos e limitações para montar uma ficha segura para você.',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(
@@ -322,7 +322,7 @@ class _GenerationProgress extends StatelessWidget {
     }
 
     if (value < 0.68) {
-      return 'Ajustando limitacoes';
+      return 'Ajustando limitações';
     }
 
     return 'Montando ficha';
@@ -343,12 +343,12 @@ class _GenerationChecklist extends StatelessWidget {
       runSpacing: AppSpacing.sm,
       spacing: AppSpacing.sm,
       children: [
-        const _GenerationChip(label: 'Dados fisicos'),
+        const _GenerationChip(label: 'Dados físicos'),
         _GenerationChip(label: data == null ? 'Objetivo' : data!.goal),
         _GenerationChip(
           label: limitations == null || limitations.isEmpty
-              ? 'Sem limitacoes'
-              : 'Limitacoes salvas',
+              ? 'Sem limitações'
+              : 'Limitações salvas',
         ),
       ],
     );

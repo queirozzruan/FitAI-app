@@ -22,7 +22,7 @@ void main() {
     );
 
     expect(find.text('Seu treino, do seu jeito'), findsOneWidget);
-    expect(find.text('Comece ja'), findsOneWidget);
+    expect(find.text('Comece já'), findsOneWidget);
   });
 
   testWidgets('shows the visual auth form', (WidgetTester tester) async {
@@ -30,7 +30,7 @@ void main() {
       const MaterialApp(home: AuthScreen()),
     );
 
-    expect(find.text('Bem vindo de volta!'), findsOneWidget);
+    expect(find.text('Bem-vindo de volta!'), findsOneWidget);
     expect(find.text('E-mail'), findsOneWidget);
     expect(find.text('Cadastre-se'), findsOneWidget);
   });
@@ -56,9 +56,9 @@ void main() {
       const MaterialApp(home: AnamnesisScreen()),
     );
 
-    expect(find.text('Seus aspectos fisicos'), findsOneWidget);
+    expect(find.text('Seus aspectos físicos'), findsOneWidget);
     expect(find.text('Idade'), findsOneWidget);
-    expect(find.text('Limitacoes Fisicas'), findsOneWidget);
+    expect(find.text('Limitações Físicas'), findsOneWidget);
     expect(find.text('Marque seu objetivo'), findsOneWidget);
   });
 
@@ -69,7 +69,7 @@ void main() {
 
     expect(find.text('Agenda de Treino'), findsOneWidget);
     expect(find.text('Dia 1'), findsOneWidget);
-    expect(find.text('Treino A - Peito e triceps'), findsOneWidget);
+    expect(find.text('Treino A - Peito e tríceps'), findsOneWidget);
     expect(find.text('TREINOS'), findsOneWidget);
   });
 
@@ -80,7 +80,7 @@ void main() {
 
     expect(find.text('Treino Simples'), findsOneWidget);
     expect(find.text('Supino reto'), findsOneWidget);
-    expect(find.text('Series'), findsWidgets);
+    expect(find.text('Séries'), findsWidgets);
     expect(find.text('Iniciar treino'), findsOneWidget);
   });
 
@@ -90,8 +90,8 @@ void main() {
     );
 
     expect(find.text('Ruan'), findsOneWidget);
-    expect(find.text('Evolucao de carga'), findsOneWidget);
-    expect(find.text('EVOLUCAO'), findsOneWidget);
+    expect(find.text('Evolução de carga'), findsOneWidget);
+    expect(find.text('EVOLUÇÃO'), findsOneWidget);
     expect(find.text('TREINOS'), findsOneWidget);
   });
 
@@ -105,10 +105,10 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Comece ja'));
+    await tester.tap(find.text('Comece já'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Bem vindo de volta!'), findsOneWidget);
+    expect(find.text('Bem-vindo de volta!'), findsOneWidget);
   });
 
   testWidgets('continues from visual auth to anamnesis', (
@@ -124,6 +124,6 @@ void main() {
     await tester.tap(find.text('Entrar').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('Seus aspectos fisicos'), findsOneWidget);
+    expect(find.text('Seus aspectos físicos'), findsOneWidget);
   });
 }
