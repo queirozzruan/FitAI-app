@@ -1,7 +1,9 @@
 import 'package:fitai/app/theme.dart';
 import 'package:fitai/core/constants/app_spacing.dart';
+import 'package:fitai/core/services/anamnesis_store.dart';
 import 'package:fitai/data/mock/mock_progress.dart';
 import 'package:fitai/data/mock/mock_user.dart';
+import 'package:fitai/models/anamnesis_data.dart';
 import 'package:flutter/material.dart';
 
 class ProgressProfileScreen extends StatelessWidget {
@@ -23,6 +25,8 @@ class ProgressProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const _ProfileHero(),
+                    const SizedBox(height: AppSpacing.xl),
+                    const _PersistedAnamnesisCard(),
                     const SizedBox(height: AppSpacing.xl),
                     const _MetricGrid(),
                     const SizedBox(height: AppSpacing.xl),
@@ -107,6 +111,135 @@ class _ProfileHero extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PersistedAnamnesisCard extends StatelessWidget {
+  const _PersistedAnamnesisCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<AnamnesisData?>(
+      future: AnamnesisStore.load(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const _ProgressCard(
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final data = snapshot.data;
+
+        if (data == null) {
+          return _ProgressCard(
+            child: Text(
+              'Preencha a anamnese para visualizar seus dados salvos aqui.',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: const Color(0xFF505F76),
+                height: 1.5,
+              ),
+            ),
+          );
+        }
+
+        return _ProgressCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.assignment_ind_outlined,
+                    color: FitAiColors.royalBlue,
+                    size: 22,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Text(
+                    'Dados da anamnese',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Wrap(
+                runSpacing: AppSpacing.sm,
+                spacing: AppSpacing.sm,
+                children: [
+                  _AnamnesisChip(label: 'Idade', value: '${data.age} anos'),
+                  _AnamnesisChip(
+                    label: 'Peso',
+                    value: '${data.weight.toStringAsFixed(1)} kg',
+                  ),
+                  _AnamnesisChip(
+                    label: 'Altura',
+                    value: '${data.height.toStringAsFixed(0)} cm',
+                  ),
+                  _AnamnesisChip(label: 'Genero', value: data.gender),
+                  _AnamnesisChip(label: 'Objetivo', value: data.goal),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                'Limitacoes',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: const Color(0xFF505F76),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                data.limitations.trim().isEmpty
+                    ? 'Nenhuma limitacao informada.'
+                    : data.limitations,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: FitAiColors.textPrimary,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AnamnesisChip extends StatelessWidget {
+  const _AnamnesisChip({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.sm,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: const Color(0x332563EB)),
+        borderRadius: BorderRadius.circular(999),
+        color: const Color(0x1A2563EB),
+      ),
+      child: RichText(
+        text: TextSpan(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: const Color(0xFF004AC6),
+            fontWeight: FontWeight.w600,
+          ),
+          children: [
+            TextSpan(text: '$label: '),
+            TextSpan(
+              text: value,
+              style: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+          ],
+        ),
       ),
     );
   }
